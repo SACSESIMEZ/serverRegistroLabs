@@ -3,7 +3,7 @@
 	include('conBD.php');
 
 	$json = array();
-	if(isset($_POST["numero"], $_POST["numeroLab"]){
+	if(isset($_POST["numero"], $_POST["numeroLab"])){
 		$consulta;
 		$bandera = false;
 		if(isset($_POST["idComputadora"])){
@@ -16,13 +16,13 @@
 		$consulta->bindParam("numero", $_POST["numero"], PDO::PARAM_STR);
 		$consulta->bindParam("numeroLab", $_POST["numeroLab"], PDO::PARAM_STR);
 		if($consulta->execute()){
-			array_push($json, array("res" => $bandera ? $consulta->lastInsertId() : 0);
+			array_push($json, array("res" => $bandera ? $consulta->lastInsertId() : 0));
 		} else{
-			array_push($json, array("res" => -1);
+			array_push($json, array("res" => -1));
 		}
 		
 	} else{
-		array_push($json, array("res" => -1);
+		array_push($json, array("res" => -1));
 	}
 	echo json_encode($json);
 ?>

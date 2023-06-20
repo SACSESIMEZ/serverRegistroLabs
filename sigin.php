@@ -19,11 +19,12 @@
 				$consulta->bindParam("idUsuario", $_POST["idUsuario"], PDO::PARAM_STR);
 				$consulta->bindParam("idCarrera", $_POST["idDeptoCarrera"], PDO::PARAM_STR);
 			}
-			array_push($json, array("res" => $consulta->execute());
-			echo json_encode($json);
+			array_push($json, array("res" => $consulta->execute()));
+		} else{
+			array_push($json, array("res" => false));
 		}
 	} else{
-		array_push($json, array("res" => false);
-		echo json_encode($json);
+		array_push($json, array("res" => false));
 	}
+	echo json_encode($json);
 ?>

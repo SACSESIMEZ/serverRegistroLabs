@@ -10,9 +10,9 @@
 		$consulta->bindParam("fecha", date("Y-m-d"), PDO::PARAM_STR);
 		$consulta->bindParam("horaEntrada", date("H-i-s"), PDO::PARAM_STR);
 		$idAcceso = ($consulta->execute()) ? $connection->lastInsertId() : -1;
-		array_push($json, array("res" => $idAcceso);
+		array_push($json, array("res" => $idAcceso));
 	} else{
-		array_push($json, array("res" => -1);
+		array_push($json, array("res" => -1));
 	}
 	echo json_encode($json);
 ?>
