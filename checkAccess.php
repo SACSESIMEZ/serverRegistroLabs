@@ -8,10 +8,8 @@
 			$consulta = $connection->prepare("INSERT INTO accesos (id_computadora, id_usuario, fecha, hora_entrada) VALUES (:idComputadora, :idUsuario, :fecha, :horaEntrada)");
 			$consulta->bindParam("idComputadora", $_REQUEST["idComputadora"], PDO::PARAM_STR);
 			$consulta->bindParam("idUsuario", $_REQUEST["idUsuario"], PDO::PARAM_STR);
-			$date = date("Y-m-d");
-			$time = date("H:i:s", time());
-			$consulta->bindParam("fecha", $date, PDO::PARAM_STR);
-			$consulta->bindParam("horaEntrada", $time, PDO::PARAM_STR);
+			$consulta->bindParam("fecha", date("Y-m-d"), PDO::PARAM_STR);
+			$consulta->bindParam("horaEntrada", date("H-i-s"), PDO::PARAM_STR);
 			$idAcceso = ($consulta->execute()) ? $connection->lastInsertId() : -1;
 			array_push($json, array("res" => $idAcceso, "msg" => "Inicio exitoso"));
 		} else{

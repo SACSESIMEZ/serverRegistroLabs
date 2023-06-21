@@ -4,10 +4,11 @@
 
 	$json = array();
 	try{
-		if(isset($_POST["idAcceso"])){
-			$consulta = $connection->prepare("INSERT INTO accesos (hora_salida) VALUES (:horaSalida) WHERE id_acceso = :idAcceso");
-			$consulta->bindParam("idAcceso", $_POST["idAcceso"], PDO::PARAM_STR);
-			$consulta->bindParam("horaSalida", date("H-i-s"), PDO::PARAM_STR);
+		if(isset($_REQUEST["idAcceso"])){
+			$consulta = $connection->prepare("UPDATE accesos SET hora_salida = :horaSalida WHERE id_acceso = :idAcceso");
+			$consulta->bindParam("idAcceso", $_REQUEST["idAcceso"], PDO::PARAM_STR);
+			$time = date("H:i:s", time());
+			$consulta->bindParam("horaSalida", $time, PDO::PARAM_STR);
 			
 			array_push($json, array("res" => $consulta->execute(), "msg" => "Salida exitosa"));
 		} else{
