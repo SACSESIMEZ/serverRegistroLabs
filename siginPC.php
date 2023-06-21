@@ -3,26 +3,31 @@
 	include('conBD.php');
 
 	$json = array();
-	if(isset($_POST["numero"], $_POST["numeroLab"])){
-		$consulta;
-		$bandera = false;
-		if(isset($_POST["idComputadora"])){
-			$consulta = $connection->prepare("UPDATE computadoras SET numero = :numero, numero_lab = :numeroLab WHERE id_computadora = :idComputadora");
-			$consulta->bindParam("idComputadora", $_POST["idComputadora"], PDO::PARAM_STR);
-			$bandera = true;
+	try{
+		if(isset($_POST["num"], $_POST["numLab"])){
+			$consulta;
+			$bandera = false;
+			if(isset($_POST["idComputadora"])){
+				$consulta = $connection->prepare("UPDATE computadoras SET num = :num, num_lab = :numLab WHERE id_computadora = :idComputadora");
+				$consulta->bindParam("idComputadora", $_POST["idComputadora"], PDO::PARAM_STR);
+				$bandera = true;
+			} else{
+				$consulta = $connection->prepare("INSERT INTO computadoras (num, num_lab) VALUES (:num, :numLab)");	
+			}
+			$consulta->bindParam("num", $_POST["num"], PDO::PARAM_STR);
+			$consulta->bindParam("numLab", $_POST["numLab"], PDO::PARAM_STR);
+			if($consulta->execute()){
+				array_push($json, array("res" => $bandera ? $consulta->lastInsertId() : 0, "msg" => "Registro exitoso"));
+			} else{
+				array_push($json, array("res" => -1, "msg" => "Error al registrar"));
+			}
+			
 		} else{
-			$consulta = $connection->prepare("INSERT INTO computadoras (numero, numero_lab) VALUES (:numero, :numeroLab");	
+			array_push($json, array("res" => -1, "msg" => "No se enviaron todos los datos".$_POST["num"]." ".$_POST["numLab"]));
 		}
-		$consulta->bindParam("numero", $_POST["numero"], PDO::PARAM_STR);
-		$consulta->bindParam("numeroLab", $_POST["numeroLab"], PDO::PARAM_STR);
-		if($consulta->execute()){
-			array_push($json, array("res" => $bandera ? $consulta->lastInsertId() : 0));
-		} else{
-			array_push($json, array("res" => -1));
-		}
-		
-	} else{
-		array_push($json, array("res" => -1));
+	} catch(Exception $e){
+		array_push($json, array("res" => -1, "msg" => $e));
 	}
+	
 	echo json_encode($json);
 ?>
