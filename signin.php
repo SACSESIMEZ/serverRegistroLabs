@@ -3,8 +3,13 @@
 	include('conBD.php');
 
 	$json = array();
-	try{
-		if(isset($_POST["idUsuario"], $_POST["nombre"], $_POST["correo"], $_POST["idTipo"], $_POST["idDeptoCarrera"])){
+	/*try{
+		
+	}catch(Exception $e){
+		array_push($json, array("res" => false, "msg" => $e));
+	}*/
+
+	if(isset($_POST["idUsuario"], $_POST["nombre"], $_POST["correo"], $_POST["idTipo"], $_POST["idDeptoCarrera"])){
 			$consulta = $connection->prepare("INSERT INTO usuarios VALUES (:idUsuario, :nombre, :correo, :idTipo)");
 			$consulta->bindParam("idUsuario", $_POST["idUsuario"], PDO::PARAM_STR);
 			$consulta->bindParam("nombre", $_POST["nombre"], PDO::PARAM_STR);
@@ -27,8 +32,5 @@
 		} else{
 			array_push($json, array("res" => false, "msg" => "No se enviaron todos los datos"));
 		}
-	}catch(Exception $e){
-		array_push($json, array("res" => false), "msg" => $e);
-	}
 	echo json_encode($json);
 ?>

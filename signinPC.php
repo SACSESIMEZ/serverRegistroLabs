@@ -23,7 +23,7 @@
 			}
 			
 		} else{
-			array_push($json, array("res" => -1, "msg" => "No se enviaron todos los datos".$_POST["num"]." ".$_POST["numLab"]));
+			array_push($json, array("res" => -1, "msg" => "No se enviaron todos los datos"));
 		}
 	} catch(Exception $e){
 		array_push($json, array("res" => -1, "msg" => $e));
