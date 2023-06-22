@@ -3,11 +3,7 @@
 	include('conBD.php');
 
 	$json = array();
-	$months = [4, 7, 10, 13];
-	$numAccess = 0;
 	$result;
-	$flag = false;
-	$check = 0;
 	try {
 		if(isset($_REQUEST["numLab"], $_REQUEST["answers"], $_REQUEST["programms"], $_REQUEST["suggestions"], $_REQUEST["idAcceso"])){
 			$query = $connection->prepare("INSERT INTO encuestas (respuestas, programas, sugerencias, fecha, numero_lab) VALUES (:answers, :programms, :suggestions, :dateSurvey, :numLab)");
