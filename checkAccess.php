@@ -3,20 +3,35 @@
 	include('conBD.php');
 
 	$json = array();
+	$months = [4, 7, 10, 13];
+	$numAccess = 0;
+	$result;
+	$flag = false;
+	$check = 0;
 	try {
-		if(isset($_REQUEST["idUsuario"]) && isset($_REQUEST["idComputadora"])){
-			$consulta = $connection->prepare("INSERT INTO accesos (id_computadora, id_usuario, fecha, hora_entrada) VALUES (:idComputadora, :idUsuario, :fecha, :horaEntrada)");
-			$consulta->bindParam("idComputadora", $_REQUEST["idComputadora"], PDO::PARAM_STR);
-			$consulta->bindParam("idUsuario", $_REQUEST["idUsuario"], PDO::PARAM_STR);
-			$consulta->bindParam("fecha", date("Y-m-d"), PDO::PARAM_STR);
-			$consulta->bindParam("horaEntrada", date("H-i-s"), PDO::PARAM_STR);
-			$idAcceso = ($consulta->execute()) ? $connection->lastInsertId() : -1;
-			array_push($json, array("res" => $idAcceso, "msg" => "Inicio exitoso"));
+		if(isset($_REQUEST["idUsuario"])){
+			$query = $connection->prepare("SELECT count(id_acceso) as numAccess FROM accesos WHERE id_usuario = :idUsuario and extract(MONTH FROM fecha) < :month");
+			$month = date('n');
+			if($month < 7){
+				$check++;
+			} else if($month < 10){
+				$check++;
+			} else if($month < 13){
+				$check++;
+			}
+			$query->bindParam("month", $months[$check], PDO::PARAM_STR);
+			$query->bindParam("idUsuario", $_REQUEST["idUsuario"], PDO::PARAM_STR);
+			$query->execute();
+			if($query->rowCount() != 0){
+	            $result = $query->fetch(PDO::FETCH_ASSOC);
+	            $numAccess = $result["numAccess"];
+	        }
+			array_push($json, array("res" => $numAccess == 2, "msg" => "Consulta exitosa"));
 		} else{
-			array_push($json, array("res" => -1, "msg" => "No se enviaron todos los datos"));
+			array_push($json, array("res" => false, "msg" => "No se enviaron todos los datos"));
 		}
 	} catch (Exception $e) {
-		array_push($json, array("res" => -1, "msg" => $e));	
+		array_push($json, array("res" => false, "msg" => $e));	
 	}
 	echo json_encode($json);
 ?>

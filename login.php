@@ -12,8 +12,11 @@
 			$time = date("H:i:s", time());
 			$consulta->bindParam("fecha", $date, PDO::PARAM_STR);
 			$consulta->bindParam("horaEntrada", $time, PDO::PARAM_STR);
-			$idAcceso = ($consulta->execute()) ? $connection->lastInsertId() : -1;
-			array_push($json, array("res" => $idAcceso, "msg" => "Inicio exitoso"));
+			if($consulta->execute()){
+				array_push($json, array("res" => $connection->lastInsertId(), "msg" => "Inicio exitoso"));
+			} else{
+				array_push($json, array("res" => -1, "msg" => "Error al iniciar sesión"));
+			}
 		} else{
 			array_push($json, array("res" => -1, "msg" => "No se enviaron todos los datos"));
 		}
